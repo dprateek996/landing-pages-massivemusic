@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { handleAnchorClick } from "../../utils/smoothScroll";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -14,6 +15,11 @@ export default function Navbar() {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
+    const handleClick = (e, href) => {
+        handleAnchorClick(e, href);
+        setOpen(false); // Close mobile menu after click
+    };
+
     return (
         <header className="fixed inset-x-0 top-0 z-50">
             <div
@@ -27,17 +33,48 @@ export default function Navbar() {
                 <nav className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <div className="flex items-center">
-                        <a href="#" className={"font-semibold text-lg tracking-wide " + (scrolled ? "text-black" : "text-white")}>
+                        <a
+                            href="#"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            className={"font-semibold text-lg tracking-wide cursor-pointer " + (scrolled ? "text-black" : "text-white")}
+                        >
                             Massive Music
                         </a>
                     </div>
 
                     {/* Desktop links */}
                     <div className="hidden md:flex items-center space-x-8">
-                        <a href="#services" className={"text-sm font-medium " + (scrolled ? "text-zinc-800" : "text-white/90")}>Services</a>
-                        <a href="#work" className={"text-sm font-medium " + (scrolled ? "text-zinc-800" : "text-white/90")}>Work</a>
-                        <a href="#about" className={"text-sm font-medium " + (scrolled ? "text-zinc-800" : "text-white/90")}>About</a>
-                        <a href="#contact" className={"text-sm font-medium px-4 py-2 rounded-md border " + (scrolled ? "border-zinc-800 text-zinc-900" : "border-white/60 text-white/90")}>Contact</a>
+                        <a
+                            href="#services"
+                            onClick={(e) => handleClick(e, "#services")}
+                            className={"text-sm font-medium cursor-pointer hover:opacity-70 transition-opacity " + (scrolled ? "text-zinc-800" : "text-white/90")}
+                        >
+                            Services
+                        </a>
+                        <a
+                            href="#work"
+                            onClick={(e) => handleClick(e, "#work")}
+                            className={"text-sm font-medium cursor-pointer hover:opacity-70 transition-opacity " + (scrolled ? "text-zinc-800" : "text-white/90")}
+                        >
+                            Work
+                        </a>
+                        <a
+                            href="#about"
+                            onClick={(e) => handleClick(e, "#about")}
+                            className={"text-sm font-medium cursor-pointer hover:opacity-70 transition-opacity " + (scrolled ? "text-zinc-800" : "text-white/90")}
+                        >
+                            About
+                        </a>
+                        <a
+                            href="#contact"
+                            onClick={(e) => handleClick(e, "#contact")}
+                            className={"text-sm font-medium px-4 py-2 rounded-md border cursor-pointer hover:opacity-70 transition-opacity " + (scrolled ? "border-zinc-800 text-zinc-900" : "border-white/60 text-white/90")}
+                        >
+                            Contact
+                        </a>
                     </div>
 
                     {/* Mobile hamburger */}
@@ -68,10 +105,34 @@ export default function Navbar() {
                     >
                         <div className={"px-6 pb-6 " + (scrolled ? "bg-white/95 backdrop-blur-sm shadow-sm" : "bg-black/90")}>
                             <div className="flex flex-col space-y-4 pt-4">
-                                <a href="#services" onClick={() => setOpen(false)} className={scrolled ? "text-zinc-800" : "text-white"}>Services</a>
-                                <a href="#work" onClick={() => setOpen(false)} className={scrolled ? "text-zinc-800" : "text-white"}>Work</a>
-                                <a href="#about" onClick={() => setOpen(false)} className={scrolled ? "text-zinc-800" : "text-white"}>About</a>
-                                <a href="#contact" onClick={() => setOpen(false)} className={"inline-block mt-2 px-4 py-2 rounded-md border " + (scrolled ? "border-zinc-800 text-zinc-900" : "border-white text-white")}>Contact</a>
+                                <a
+                                    href="#services"
+                                    onClick={(e) => handleClick(e, "#services")}
+                                    className={"cursor-pointer hover:opacity-70 transition-opacity " + (scrolled ? "text-zinc-800" : "text-white")}
+                                >
+                                    Services
+                                </a>
+                                <a
+                                    href="#work"
+                                    onClick={(e) => handleClick(e, "#work")}
+                                    className={"cursor-pointer hover:opacity-70 transition-opacity " + (scrolled ? "text-zinc-800" : "text-white")}
+                                >
+                                    Work
+                                </a>
+                                <a
+                                    href="#about"
+                                    onClick={(e) => handleClick(e, "#about")}
+                                    className={"cursor-pointer hover:opacity-70 transition-opacity " + (scrolled ? "text-zinc-800" : "text-white")}
+                                >
+                                    About
+                                </a>
+                                <a
+                                    href="#contact"
+                                    onClick={(e) => handleClick(e, "#contact")}
+                                    className={"inline-block mt-2 px-4 py-2 rounded-md border cursor-pointer hover:opacity-70 transition-opacity " + (scrolled ? "border-zinc-800 text-zinc-900" : "border-white text-white")}
+                                >
+                                    Contact
+                                </a>
                             </div>
                         </div>
                     </motion.div>
@@ -80,4 +141,3 @@ export default function Navbar() {
         </header>
     );
 }
-

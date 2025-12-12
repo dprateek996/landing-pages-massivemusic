@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const pillars = [
   {
@@ -18,40 +18,62 @@ const pillars = [
   },
 ];
 
+const easing = [0.16, 1, 0.3, 1];
+
 export default function ThreePillars() {
+
+  const { scrollY } = useScroll();
+  const exitY = useTransform(scrollY, [0, 200], [0, -12]);
+  const exitOpacity = useTransform(scrollY, [0, 180], [1, 0.92]);
+
   return (
-    <section className="py-24 bg-white" id="about">
+    <motion.section 
+     style={{ opacity: exitOpacity, y: exitY }}
+    className="py-28 bg-white"
+      id="about"
+    >
       <div className="max-w-6xl mx-auto px-6">
+
+        {/* Section Heading */}
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl md:text-5xl font-extrabold text-zinc-900 text-center mb-16"
+          transition={{ duration: 1, ease: easing }}
+          className="text-4xl md:text-6xl font-extrabold text-zinc-900 text-center mb-20 tracking-tight"
         >
           Our Approach
         </motion.h2>
 
-        <div className="grid md:grid-cols-3 gap-12">
+        {/* Pillars Grid */}
+        <div className="grid md:grid-cols-3 gap-16">
           {pillars.map((pillar, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
               viewport={{ once: true }}
-              className="text-center"
+              transition={{
+                duration: 1,
+                ease: easing,
+                delay: index * 0.15,
+              }}
+              whileHover={{ y: -4, scale: 1.02 }}
+              whileTap={{ scale: 0.99 }}
+              className="text-center p-4 rounded-xl transition-all"
             >
-              <h3 className="text-2xl font-semibold text-zinc-800 mb-4">
+              <h3 className="text-2xl md:text-3xl font-semibold text-zinc-800 mb-4 tracking-tight">
                 {pillar.title}
               </h3>
-              <p className="text-zinc-600 leading-relaxed">
+
+              <p className="text-zinc-600 leading-relaxed text-lg">
                 {pillar.description}
               </p>
             </motion.div>
           ))}
         </div>
+
       </div>
-    </section>
+    </motion.section>
   );
 }
